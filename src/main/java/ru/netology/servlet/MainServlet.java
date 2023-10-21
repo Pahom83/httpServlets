@@ -10,6 +10,12 @@ import javax.servlet.http.HttpServletResponse;
 
 public class MainServlet extends HttpServlet {
   private PostController controller;
+  private final static String GET = "GET";
+  private final static String POST = "POST";
+  private final static String DELETE = "DELETE";
+  private final static String apiPath = "/api/posts";
+  private final static char slash = '/';
+  private final static String longPattern = "\\d+";
 
   @Override
   public void init() {
@@ -25,21 +31,21 @@ public class MainServlet extends HttpServlet {
       final var path = req.getRequestURI();
       final var method = req.getMethod();
       // primitive routing
-      if (method.equals("GET") && path.equals("/api/posts")) {
+      if (method.equals(GET) && path.equals(apiPath)) {
         controller.all(resp);
         return;
       }
-      if ((method.equals("GET") || method.equals("DELETE")) && path.matches("/api/posts/\\d+")) {
+      if ((method.equals(GET) || method.equals(DELETE)) && path.matches(apiPath + slash + longPattern)) {
         // easy way
-        final var id = Long.parseLong(path.substring(path.lastIndexOf("/") + 1));
-        if (method.equals("GET")){
+        final var id = Long.parseLong(path.substring(path.lastIndexOf(slash) + 1));
+        if (method.equals(GET)){
           controller.getById(id, resp);
         } else {
           controller.removeById(id, resp);
         }
         return;
       }
-      if (method.equals("POST") && path.equals("/api/posts")) {
+      if (method.equals(POST) && path.equals(apiPath)) {
         controller.save(req.getReader(), resp);
         return;
       }
