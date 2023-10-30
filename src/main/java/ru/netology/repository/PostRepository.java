@@ -1,22 +1,21 @@
 package ru.netology.repository;
 
+import org.springframework.stereotype.Repository;
 import ru.netology.model.Post;
 
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.atomic.AtomicLong;
-
+@Repository
 // Stub
 public class PostRepository {
     private final ConcurrentHashMap<Long, Post> posts = new ConcurrentHashMap<>();
     private final AtomicLong count = new AtomicLong(0);
     private final ConcurrentLinkedDeque<Long> deletedID = new ConcurrentLinkedDeque<>();
-
     public List<Post> all() {
         return List.copyOf(posts.values());
     }
-
     public Post getById(long id) {
         return posts.get(id);
     }
